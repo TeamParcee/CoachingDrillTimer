@@ -1,42 +1,39 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { HelperService } from './helper.service';
+import { User, UserService } from './user.service';
+import { NavController } from '@ionic/angular';
+import { FirebaseService } from './firebase.service';
 @Injectable({
   providedIn: 'root'
 })
 
-export class AuthUser {
-  constructor(
-    public email: string,
-    public password: string,
-    public introSeen?: boolean,
-    public emailConfirmed?: boolean,
-    public uid?: string
-  ) { }
-}
 export class AuthService {
 
   constructor(
     private helper: HelperService,
+    private userService: UserService,
+    private navCtrl: NavController,
+    private firebaseService: FirebaseService,
+
   ) { }
 
 
-  AuthUser: AuthUser;
 
-  checkIfIntroSeen(user: AuthUser): Promise<boolean> {
+  checkIfIntroSeen(user: User): Promise<boolean> {
     // return if intro has been seen or not
 
     return
 
   }
-  loginWithEmail(user: AuthUser): Promise<boolean> {
+  loginWithEmail(user: User): Promise<boolean> {
 
     return new Promise((resolve) => {
       // logs the user in
       firebase.auth().signInWithEmailAndPassword(user.email, user.password).then((result) => {
-        //return that the login was successfull and update AuthUser Params
-        this.AuthUser.uid = result.user.uid;
-        this.AuthUser.emailConfirmed = result.user.emailVerified;
+        //return that the login was successfull and update User Params
+        user.uid = result.user.uid;
+        user.emailVerified = result.user.emailVerified;
         return resolve()
       }).catch((e) => {
         this.helper.okAlert("There was a problem", e.message)
@@ -44,18 +41,19 @@ export class AuthService {
     })
   }
 
-  registerWithEmail(user: AuthUser): Promise<boolean> {
+  registerWithEmail(user: User): Promise<boolean> {
 
     return new Promise((resolve) => {
       // create user on firebase
       firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then((result) => {
-        this.AuthUser.uid = result.user.uid;
-        this.AuthUser.emailConfirmed = result.user.emailVerified;
+        user.uid = result.user.uid;
+        user.emailVerified = result.user.emailVerified;
 
-        // create user data
+        // create user data on firestore
+        this.firebaseService.setDocument("users/" + user.uid, {...user})
 
-
-
+        // save user to local variable
+        this.userService.user = user;
 
         // return that the account creation was successfull
         return resolve()
@@ -73,12 +71,12 @@ export class AuthService {
   }
 
 
-  confirmEmail(user: AuthUser): Promise<boolean> {
+  confirmEmail(user: User): Promise<boolean> {
     // check and return if the users email has been confirmed
     return
   }
 
-  sendConfirmationEmail(user: AuthUser): Promise<boolean> {
+  sendConfirmationEmail(user: User): Promise<boolean> {
     // send a confirmation email to the user
 
     // return if the email was sent
@@ -88,7 +86,7 @@ export class AuthService {
     return
   }
 
-  sendPasswordResetEmail(user: AuthUser): Promise<boolean> {
+  sendPasswordResetEmail(user: User): Promise<boolean> {
     // send a password reset email to the user
 
     // return if the email was sent successfully
@@ -98,16 +96,26 @@ export class AuthService {
     return
   }
 
-  signout(user: AuthUser): void {
-    // delete local user data
+  signout(user: User): void {
 
     // sign user out
+    firebase.auth().signOut().then(() => {
+      // delete local user data
+      this.userService.user = null;
 
-    // navagate to login screen
+      // navagate to login screen
+      this.navCtrl.navigateBack("/login")
+
+    })
+
+
+
+
+
 
   }
 
-  deleteAccount(user: AuthUser): void {
+  deleteAccount(user: User): void {
     // delete local user data
 
     // delete userdata from firestore

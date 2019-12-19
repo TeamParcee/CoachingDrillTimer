@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { AuthService, AuthUser } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { User, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-confirm-email',
@@ -12,12 +13,13 @@ export class ConfirmEmailPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private authService: AuthService,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
   }
 
-  user: AuthUser = this.authService.AuthUser;
+  user: User = this.userService.user;
 
   logout() {
     this.authService.signout(this.user)

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthUser } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { User, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-settings',
@@ -10,12 +11,13 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
   }
 
-  user: AuthUser = this.authService.AuthUser;
+  user: User = this.userService.user;
 
   signout(){
     this.authService.signout(this.user);
@@ -24,4 +26,4 @@ export class SettingsPage implements OnInit {
   deleteAccount(){
     this.authService.deleteAccount(this.user)
   }
-}
+} 

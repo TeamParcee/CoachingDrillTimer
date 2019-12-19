@@ -34,7 +34,7 @@
 
       <ion-item>
         <ion-label position="stacked">Email</ion-label>
-        <ion-input #email="ngModel" name="email" [(ngModel)]="user.email" required></ion-input>
+        <ion-input type="email" #email="ngModel" name="email" [(ngModel)]="user.email" required></ion-input>
       </ion-item>
 
       <ion-text color="danger">
@@ -45,7 +45,7 @@
 
       <ion-item>
         <ion-label position="stacked">Password</ion-label>
-        <ion-input #password="ngModel" name="password" [(ngModel)]="user.password" required></ion-input>
+        <ion-input type="password" #password="ngModel" name="password" [(ngModel)]="user.password" required></ion-input>
       </ion-item>
 
       <ion-text color="danger">

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { AuthService, AuthUser } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { UserService, User } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -11,17 +12,18 @@ export class LoginPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
+    private userService: UserService,
     private authService: AuthService,
   ) { }
 
   ngOnInit() {
   }
 
-  user: AuthUser = new AuthUser("", "", true);
+  user: User = new User;
 
   login() {
     this.authService.loginWithEmail(this.user).then(() => {
-      this.authService.AuthUser = this.user;
+      this.userService.user = this.user;
       this.navCtrl.navigateForward("/tabs/drill-timer")
     })
   }

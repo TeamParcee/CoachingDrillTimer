@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthUser } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { User } from '../services/user.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,7 +15,7 @@ export class ForgotPasswordPage implements OnInit {
 
   ngOnInit() {
   }
-  user: AuthUser;
+  user: User;
 
   sendPasswordResetEmail() {
     this.authService.sendPasswordResetEmail(this.user).then(() => {

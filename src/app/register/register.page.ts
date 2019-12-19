@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { AuthService, AuthUser } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { User } from '../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterPage implements OnInit {
   }
 
 
-  user: AuthUser = new AuthUser("", "");
+  user: User = new User("", "", "", "", "", "", false,);
 
   createAccount() {
     this.authService.registerWithEmail(this.user).then(() => {

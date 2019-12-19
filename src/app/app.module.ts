@@ -15,6 +15,7 @@ import { NativeFeaturesService } from './services/native-features.service';
 import { PlanService } from './services/plan.service';
 import { TimerService } from './services/timer.service';
 import { HelperService } from './services/helper.service';
+import { UserService } from './services/user.service';
 
 
 // Your web app's Firebase configuration
@@ -47,6 +48,7 @@ firebase.analytics();
     NativeFeaturesService,
     PlanService,
     TimerService,
+    UserService,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
