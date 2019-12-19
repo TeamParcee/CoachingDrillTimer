@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
-
+import * as firebase from 'firebase';
+import { HelperService } from './helper.service';
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthUser {
   constructor(
-    // public email: string,
-    // public password: string,
-    // public introSeen: boolean,
-    // public emailConfirmed: boolean,
-    // public uid: string
+    public email: string,
+    public password: string,
+    public introSeen?: boolean,
+    public emailConfirmed?: boolean,
+    public uid?: string
   ) { }
 }
 export class AuthService {
 
   constructor(
-
+    private helper: HelperService,
   ) { }
 
 
@@ -28,13 +29,23 @@ export class AuthService {
 
   }
   loginWithEmail(user: AuthUser): Promise<boolean> {
-    // logs the user in
 
-    // save user data to local storage
+    return new Promise((resolve) => {
+      // logs the user in
+      firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(() => {
+        //return that the login was successfull
+        return resolve()
+      }).catch((e) => {
+        this.helper.okAlert("There was a problem", e.message)
+      })
 
-    //return that the login was successfull
+    })
 
-    // send error if account creation was not successfull
+
+
+
+
+
     return
   }
 

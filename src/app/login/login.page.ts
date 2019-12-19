@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  user: AuthUser;
+  user: AuthUser = new AuthUser("", "");
 
   login() {
     this.authService.loginWithEmail(this.user).then(() => {

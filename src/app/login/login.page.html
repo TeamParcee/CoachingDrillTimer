@@ -4,10 +4,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
 
+  <form #loginForm="ngForm" novalidate>
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input name="email" type="email" #email ="ngModel" [(ngModel)]="user.email" required></ion-input>
+      </ion-item>
+      <ion-text color="danger">
+        <p *ngIf="!email.valid && email.touched" class="ion-padding-start">
+          email is required
+        </p>
+      </ion-text>
 
-  <ion-button (click)="login()">Login</ion-button>
-  <ion-button routerLink="/register">Create Account</ion-button>
+      <ion-item>
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input name="password" type="password" #password [(ngModel)]="user.password" required></ion-input>
+      </ion-item>
+    </ion-list>
+  </form>
+
   <ion-button routerLink="/forgot-password" fill="clear">Forgot Password</ion-button>
+  <ion-button type="submit" expand="block" (click)="login()">Login</ion-button>
+  <ion-button expand="block" color="secondary" routerLink="/register">Create Account</ion-button>
 </ion-content>
