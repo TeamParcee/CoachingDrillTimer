@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/practice-plans"></ion-back-button>
+    </ion-buttons>
+    <ion-title>plan</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="savePlan()">Change Time</ion-button>
+      <ion-button (click)="deletePlan()">Delete Plan</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-button (click)="addActivity()">Add Activity</ion-button>
+  <ion-button (click)="deleteActivity()">Delete Activity</ion-button>
+  <ion-button (click)="editActivity()">Edit Activity</ion-button>
+</ion-content>

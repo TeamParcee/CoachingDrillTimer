@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>drill-timer</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/settings">Settings</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-next-activity></app-next-activity>
+  <app-activity-list></app-activity-list>
+  <ion-button routerLink="/view-notes" (click)="viewNotes()">View Notes</ion-button>
+</ion-content>
