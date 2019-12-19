@@ -7,7 +7,54 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <form>
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">First Name</ion-label>
+        <ion-input #fname="ngModel" name="fname" [(ngModel)]="user.fname" required></ion-input>
+      </ion-item>
 
-  <ion-button (click)="createAccount()">Create Account</ion-button>
+      <ion-text color="danger">
+        <p *ngIf="!fname.valid && fname.touched" class="ion-padding-start">
+          First Name is required
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked">Last Name</ion-label>
+        <ion-input #lname="ngModel" name="lname" [(ngModel)]="user.lname" required></ion-input>
+      </ion-item>
+
+      <ion-text color="danger">
+        <p *ngIf="!lname.valid && lname.touched" class="ion-padding-start">
+          Last Name is required
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input #email="ngModel" name="email" [(ngModel)]="user.email" required></ion-input>
+      </ion-item>
+
+      <ion-text color="danger">
+        <p *ngIf="!email.valid && email.touched" class="ion-padding-start">
+          Email is required
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input #password="ngModel" name="password" [(ngModel)]="user.password" required></ion-input>
+      </ion-item>
+
+      <ion-text color="danger">
+        <p *ngIf="!password.valid && password.touched" class="ion-padding-start">
+          Password is required
+        </p>
+      </ion-text>
+
+    </ion-list>
+  </form>
+  <ion-button expand="block" (click)="createAccount()">Create Account</ion-button>
 </ion-content>

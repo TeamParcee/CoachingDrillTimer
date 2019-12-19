@@ -17,10 +17,11 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  user: AuthUser = new AuthUser("", "");
+  user: AuthUser = new AuthUser("", "", true);
 
   login() {
     this.authService.loginWithEmail(this.user).then(() => {
+      this.authService.AuthUser = this.user;
       this.navCtrl.navigateForward("/tabs/drill-timer")
     })
   }

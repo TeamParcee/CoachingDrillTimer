@@ -21,6 +21,7 @@ export class AuthService {
   ) { }
 
 
+  AuthUser: AuthUser;
 
   checkIfIntroSeen(user: AuthUser): Promise<boolean> {
     // return if intro has been seen or not
@@ -32,31 +33,42 @@ export class AuthService {
 
     return new Promise((resolve) => {
       // logs the user in
-      firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(() => {
-        //return that the login was successfull
+      firebase.auth().signInWithEmailAndPassword(user.email, user.password).then((result) => {
+        //return that the login was successfull and update AuthUser Params
+        this.AuthUser.uid = result.user.uid;
+        this.AuthUser.emailConfirmed = result.user.emailVerified;
         return resolve()
       }).catch((e) => {
         this.helper.okAlert("There was a problem", e.message)
       })
+    })
+  }
 
+  registerWithEmail(user: AuthUser): Promise<boolean> {
+
+    return new Promise((resolve) => {
+      // create user on firebase
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then((result) => {
+        this.AuthUser.uid = result.user.uid;
+        this.AuthUser.emailConfirmed = result.user.emailVerified;
+
+        // create user data
+
+
+
+
+        // return that the account creation was successfull
+        return resolve()
+      }).catch((e) => {
+
+        // send error if acount creation was not successfull
+        this.helper.okAlert("There was a problem", e.message)
+      })
     })
 
 
 
 
-
-
-    return
-  }
-
-  registerWithEmail(user: AuthUser): Promise<boolean> {
-    // create user on firebase
-
-    // create user data
-
-    // return that the account creation was successfull
-
-    // send error if acount creation was not successfull
     return
   }
 

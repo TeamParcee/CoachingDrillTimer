@@ -15,7 +15,7 @@ export class SettingsPage implements OnInit {
   ngOnInit() {
   }
 
-  user: AuthUser;
+  user: AuthUser = this.authService.AuthUser;
 
   signout(){
     this.authService.signout(this.user);

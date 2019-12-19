@@ -17,12 +17,12 @@ export class ConfirmEmailPage implements OnInit {
   ngOnInit() {
   }
 
-  user: AuthUser = new AuthUser();
+  user: AuthUser = this.authService.AuthUser;
 
   logout() {
     this.authService.signout(this.user)
-    // this.navCtrl.navigateBack("/login")
   }
+  
   login() {
     this.authService.confirmEmail(this.user).then((result) => {
       if (result) {

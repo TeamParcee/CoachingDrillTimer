@@ -18,7 +18,7 @@ export class RegisterPage implements OnInit {
   }
 
 
-  user: AuthUser;
+  user: AuthUser = new AuthUser("", "");
 
   createAccount() {
     this.authService.registerWithEmail(this.user).then(() => {
