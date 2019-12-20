@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/plans"></ion-back-button>
+      <ion-back-button defaultHref="tabs/practice-plans"></ion-back-button>
     </ion-buttons>
     <ion-title>Plan</ion-title>
   </ion-toolbar>
@@ -20,13 +20,10 @@
   <ion-button (click)="addActivity()">Add Activity</ion-button>
 
   <ion-reorder-group *ngIf="plan" (ionItemReorder)="reorderItems($event)" disabled="false">
-    <ion-item *ngFor="let activity of activities">
-      <ion-label class="ion-text-wrap" (click)="viewNotes(activity)">
+    <ion-item (click)="editActivity(activity)" *ngFor="let activity of activities">
+      <ion-label class="ion-text-wrap">
         {{ activity.name }}
         <p> {{ activity.duration }} minutes - {{ (activity.startTime) ? activity.startTime  : "No Start Time"}}</p>
-      </ion-label>
-      <ion-label>
-        <p (click)="editActivity(activity)">Edit</p>
       </ion-label>
       <ion-buttons slot="end">
         <ion-button color="dark">

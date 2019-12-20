@@ -21,6 +21,11 @@ import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { AddActivityPage } from './add-activity/add-activity.page';
+import { ViewNotesPage } from './view-notes/view-notes.page';
+import { FormsModule } from '@angular/forms';
+import { QuillModule } from 'ngx-quill'
+import { EditActivityPage } from './edit-activity/edit-activity.page';
 
 /* native controls
 ionic cordova plugin add cordova-plugin-media
@@ -51,11 +56,21 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [
+    AppComponent,
+    AddActivityPage,
+    EditActivityPage,
+    ViewNotesPage],
+  entryComponents: [
+    AddActivityPage,
+    EditActivityPage,
+    ViewNotesPage,
+  ],
   imports: [
-    BrowserModule, 
-    IonicModule.forRoot(), 
+    BrowserModule,
+    FormsModule,
+    IonicModule.forRoot(),
+    QuillModule.forRoot(),
     AppRoutingModule],
   providers: [
     StatusBar,
@@ -75,4 +90,4 @@ firebase.analytics();
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

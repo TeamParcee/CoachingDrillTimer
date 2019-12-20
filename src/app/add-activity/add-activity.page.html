@@ -1,18 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/plan"></ion-back-button>
-    </ion-buttons>
-    <ion-title>add-activity</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="save()">Save</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-
-
-  <ion-button (click)="save()">Save</ion-button>
-</ion-content>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="close()">
+          Close
+        </ion-button>
+      </ion-buttons>
+      <ion-title> Add Activity</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Name</ion-label>
+        <ion-input [(ngModel)]="activity.name"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="errorName" lines="none">
+        <ion-label color="danger">
+          <p>Please enter a name for this activity</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Duration (in minutes / numbers only)</ion-label>
+        <ion-input type="text" pattern="[0-9]*"  [(ngModel)]="activity.duration"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="errorDuration" lines="none">
+        <ion-label color="danger">
+          <p>Please enter the duration of this activity</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label postion="stacked">Notes</ion-label>
+      </ion-item>
+      <quill-editor [(ngModel)]="activity.notes"></quill-editor>
+    </ion-list>
+    <ion-button (click)="save()">Save</ion-button>
+  </ion-content>

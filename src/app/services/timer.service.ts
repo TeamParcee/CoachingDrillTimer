@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HelperService } from './helper.service';
 import { FirebaseService } from './firebase.service';
 import { UserService } from './user.service';
+import { PlanService } from './plan.service';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import * as moment from 'moment';
-import { ActivityService } from './activity.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class TimerService {
   constructor(
     private userService: UserService,
     private firebaseService: FirebaseService,
-    private activityService: ActivityService,
     private helper: HelperService,
+    private planService: PlanService,
     private media: Media,
     private vibration: Vibration,
     private backgroundMode: BackgroundMode,
@@ -117,11 +117,12 @@ export class TimerService {
 
   async startPlan() {
     this.backgroundMode.enable();
-    let user: any = this.userService.user;
-    let activities = this.activityService.currentActivities;
-  
-    if (activities.length > this.count) {
-      this.getTimerCount(activities[this.count], activities[this.count - 1]);
+    let user = this.userService.user;
+
+    this.firebaseService.setDocument("users/" + user.uid + "/utilities/activeActivity", { active: true });
+    this.length = this.planService.activities.length;
+    if (this.length > this.count) {
+      this.getTimerCount(this.planService.activities[this.count], this.planService.activities[this.count - 1]);
     } else {
       this.activeActivity = null;
       this.currentActivity = { name: "All Activities Have Ended", time: null };
@@ -138,7 +139,6 @@ export class TimerService {
     this.backgroundMode.disable();
     this.showAlert = false;
     let user = this.userService.user;
-    this.firebaseService.setDocument("users/" + user.uid + "/utilities/activeActivity", { active: false })
     this.activeActivity = null;
     clearInterval(this.timerInterval);
     this.count = 0

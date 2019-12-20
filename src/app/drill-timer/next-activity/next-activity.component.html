@@ -1,3 +1,22 @@
-<p>
-  next-activity works!
-</p>
+<ion-card style="background: white;" *ngIf="showTimer" (click)="viewCurrentActivity(currentActivity)">
+  <ion-card-header>
+
+    <ion-card-subtitle>
+      {{ (currentActivity?.name) ? currentActivity?.name : "Getting Next Activity..." }}
+      <ion-spinner *ngIf="!currentActivity"></ion-spinner>
+    </ion-card-subtitle>
+    <ion-card-title> {{  currentActivity?.time }}
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+
+
+    <ion-label>
+      <p>Next Activity: <b>{{ nextActivity?.name }} </b></p>
+      <p> Start Time: <b>{{ nextActivity?.startTime }}</b></p>
+
+    </ion-label>
+
+  </ion-card-content>
+
+</ion-card>

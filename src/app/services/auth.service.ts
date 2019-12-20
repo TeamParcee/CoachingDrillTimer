@@ -59,7 +59,7 @@ export class AuthService {
         return resolve()
       }).catch((e) => {
         // send error if acount creation was not successfull
-        this.helper.okAlert("There was a problem", e.message)
+        this.helper.okAlert("There was a problem", e.message) 
       })
     })
 

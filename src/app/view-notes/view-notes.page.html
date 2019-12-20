@@ -1,12 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/drill-library"></ion-back-button>
+      <ion-button (click)="close()">
+        Close
+      </ion-button>
     </ion-buttons>
-    <ion-title>view-notes</ion-title>
+    <ion-title>View Notes</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+  <ion-card>
+    <ion-card-content>
+      <ion-label [innerHtml]="activity.notes"></ion-label>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

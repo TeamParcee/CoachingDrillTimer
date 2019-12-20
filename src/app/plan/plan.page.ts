@@ -7,13 +7,15 @@ import * as firebase from 'firebase';
 import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { HelperService } from '../services/helper.service';
-import { UserService } from '../services/user.service';
+import { UserService, User } from '../services/user.service';
 import { TimerService } from '../services/timer.service';
+import { AddActivityPage } from '../add-activity/add-activity.page';
+import { EditActivityPage } from '../edit-activity/edit-activity.page';
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.page.html',
   styleUrls: ['./plan.page.scss'],
-})  
+})
 export class PlanPage implements OnInit {
 
 
@@ -25,7 +27,7 @@ export class PlanPage implements OnInit {
     private helper: HelperService,
     private timerService: TimerService,
     private planService: PlanService
-,
+    ,
   ) { }
 
   ngOnInit() {
@@ -34,26 +36,23 @@ export class PlanPage implements OnInit {
 
   plan;
   user: User;
-  activities: Activity[];
+  activities;
   orderArray;
   totalTime;
 
   date;
   endTime;
-
+  
   async ionViewWillEnter() {
-    await this.getUser();
     await this.getPlan();
   }
-  async getUser() {
-    this.user = await this.userService.getUser() as User;
-  }
-  async getPlan() {
-    return new Promise((resolve) => {
 
+  async getPlan() {
+    let user = this.userService.user;
+    return new Promise((resolve) => {
       this.route.paramMap.subscribe(async (paramMap) => {
         let id = paramMap.get('id');
-        this.firebaseService.getDocument("users/" + this.user.uid + "/plans/" + id).then((plan) => {
+        this.firebaseService.getDocument("users/" + user.uid + "/plans/" + id).then((plan) => {
           this.plan = plan;
           this.getActivities();
         })
@@ -64,9 +63,10 @@ export class PlanPage implements OnInit {
   }
 
   async getActivities() {
-    firebase.firestore().collection("/users/" + this.user.uid + "/plans/" + this.plan.id + "/activities")
+    let user = this.userService.user;
+    firebase.firestore().collection("/users/" + user.uid + "/plans/" + this.plan.id + "/activities")
       .orderBy("order")
-      .get().then((activitySnap) => {
+      .onSnapshot((activitySnap) => {
         this.totalTime = 0;
         let activities = [];
         this.orderArray = [];
@@ -97,16 +97,16 @@ export class PlanPage implements OnInit {
 
 
   addActivity() {
-    this.helper.openModal(AddActivityPage, { plan: this.plan })
+    this.helper.openModalPromise(AddActivityPage, { plan: this.plan }).then(()=>{
+      this.getPlan();
+    })
   }
 
   editActivity(activity) {
-    this.helper.openModal(AddActivityPage, { plan: this.plan, activity: activity, edit: true })
+    this.helper.openModal(EditActivityPage, { plan: this.plan, activity: activity})
   }
 
-  viewNotes(activity) {
-    this.helper.openModal(ViewActivityPage, { activity: activity })
-  }
+
 
 
   reorderItems(ev) {
@@ -127,20 +127,21 @@ export class PlanPage implements OnInit {
   }
 
   updateOrder() {
-
+    let user = this.userService.user;
     this.orderArray.forEach((activity) => {
-      firebase.firestore().doc("/users/" + this.user.uid + "/plans/" + this.plan.id + "/activities/" + activity.id).update({ order: activity.order })
+      firebase.firestore().doc("/users/" + user.uid + "/plans/" + this.plan.id + "/activities/" + activity.id).update({ order: activity.order })
     })
   }
 
 
- 
+
   getTimeOfEvent(time, minutes) {
     let x = moment(time, "hh:mm a").add('minutes', minutes).format('LT');
     return x;
   }
 
   updateTime() {
+    let user = this.userService.user;
     let time = {
       date: moment(this.plan.isoDatetime).format('ddd, MMM DD, YYYY'),
       isoDatetime: this.plan.isoDatetime,
@@ -148,15 +149,15 @@ export class PlanPage implements OnInit {
       timestamp: this.timerService.getTimeStamp(this.plan.isoDatetime)
     }
 
-
-    this.firebaseService.updateDocument("/users/" + this.user.uid + "/plans/" + this.plan.id, time);
+    this.firebaseService.updateDocument("/users/" + user.uid + "/plans/" + this.plan.id, time);
     this.getPlan();
   }
 
-  updateEndTime(){
+  updateEndTime() {
+    let user = this.userService.user;
     let isoEndTime = moment(this.plan.date + " " + this.endTime, "ddd, MMM DD, YYYY, h:m A").format();
     this.firebaseService.
-    updateDocument("/users/" + this.user.uid + "/plans/" + this.plan.id, { endTime: this.endTime, isoEndTime: isoEndTime, endTimestamp: this.timerService.getTimeStamp(isoEndTime) })
+      updateDocument("/users/" + user.uid + "/plans/" + this.plan.id, { endTime: this.endTime, isoEndTime: isoEndTime, endTimestamp: this.timerService.getTimeStamp(isoEndTime) })
 
   }
 }

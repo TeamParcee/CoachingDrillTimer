@@ -3,6 +3,9 @@ import { PlanService, Plan } from 'src/app/services/plan.service';
 import { ViewNotesPage } from 'src/app/view-notes/view-notes.page';
 import { Activity } from 'src/app/services/activity.service';
 import { HelperService } from 'src/app/services/helper.service';
+import * as firebase from 'firebase';
+import { TimerService } from 'src/app/services/timer.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-activity-list',
@@ -13,7 +16,9 @@ export class ActivityListComponent implements OnInit {
 
   constructor(
     private planService: PlanService,
-    private helper: HelperService
+    private helper: HelperService,
+    private timerService: TimerService,
+    private userService: UserService,
   ) { }
 
 
@@ -23,21 +28,18 @@ export class ActivityListComponent implements OnInit {
 
 
   async ionViewWillEnter() {
-    await this.getNextPlan();
   }
 
-  async getNextPlan() {
-    this.planService.getNextPlan().then((plan: Plan)=>{
-      this.plan = plan;
-      this.getActivities(plan);
-    })
-  }
+
+  user;
+
+ 
 
   viewNotes(activity: Activity) {
-    this.helper.openModal(ViewNotesPage, {activity: activity})
+    this.helper.openModal(ViewNotesPage, { activity: activity })
   }
 
-  getActivities(plan:Plan){
-    //  TODO: get activities from firebase
-  }
+
+
+
 }

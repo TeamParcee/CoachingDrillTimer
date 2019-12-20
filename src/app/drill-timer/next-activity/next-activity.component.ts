@@ -13,30 +13,29 @@ export class NextActivityComponent implements OnInit {
     private activityService: ActivityService,
   ) { }
 
-  ngOnInit() {}
 
   currentActivity: Activity;
   nextActivity: Activity;
 
 
-  ionViewWillEnter(){
+  ngOnInit() {
     this.getCurrentActivity();
     this.getNextActivity();
   }
-  
-  getNextActivity(){
-    this.activityService.getNextActivity().then((activity)=>{
-      this.nextActivity = activity
-    })
+  ionViewWillEnter(){
+    console.log("bitch")
+  }
+  getNextActivity() {
+    this.currentActivity = this.activityService.nextActivity;
+    console.log("current", this.currentActivity);
   }
 
-  getCurrentActivity(){
-    this.activityService.getActiveActivity().then((activity)=>{
-      this.currentActivity = activity
-    })
+  getCurrentActivity() {
+    this.nextActivity = this.activityService.nextActivity
+    console.log("next", this.nextActivity)
   }
 
-  viewNotes(activity: Activity){
+  viewNotes(activity: Activity) {
     // this.helper.openModal(ViewNotesPage, {activity: activity} )
   }
 }

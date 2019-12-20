@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-view-notes',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewNotesPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private helper: HelperService,
+  ) { }
 
+
+  activity;
   ngOnInit() {
   }
 
+  close(){
+    this.helper.closeModal();
+  }
 }

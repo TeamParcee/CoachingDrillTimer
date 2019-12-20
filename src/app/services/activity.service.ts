@@ -6,16 +6,25 @@ import { Plan } from './plan.service';
 })
 
 export class Activity {
-  constructor(){
-
-  }
+  constructor(
+    public name?: string,
+    public duration?: number,
+    public startTime?: string,
+    public notes?: string,
+    public id?: string,
+    public order?: number,
+    public planId?: string,
+  ) { }
 }
+
 export class ActivityService {
 
   constructor() { }
 
+  currentActivity;
+  nextActivity;
   currentActivities: Activity[];
-  
+
   addActivity(activity: Activity, plan: Plan): Promise<boolean> {
     // save activity to the plan on firebase
 
@@ -48,7 +57,7 @@ export class ActivityService {
   getNextActivity(): Promise<Activity> {
     // get and return the next activity
 
-    return 
+    return
   }
 
   getActiveActivity(): Promise<Activity> {

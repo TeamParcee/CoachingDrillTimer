@@ -27,6 +27,11 @@ export class PlanService {
     private firebaseService: FirebaseService,
   ) { }
 
+
+  nextPlan: Plan;
+  activities;
+
+
   addPlan(plan: Plan) {
     let user = this.userService.user;
     return new Promise((resolve) => {

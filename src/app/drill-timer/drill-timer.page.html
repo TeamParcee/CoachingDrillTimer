@@ -1,14 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>drill-timer</ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/settings">Settings</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content>
-  <app-next-activity></app-next-activity>
-  <app-activity-list></app-activity-list>
-  <ion-button routerLink="/view-notes" (click)="viewNotes()">View Notes</ion-button>
-</ion-content>
+    <ion-toolbar>
+      <ion-title>Next Plan</ion-title>
+      <ion-buttons slot="end">
+        <ion-button>
+          Settings
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  
+  </ion-header>
+  
+  <ion-content>
+  
+    <ion-card style="background: white;" *ngIf="showTimer" (click)="viewCurrentActivity(currentActivity)">
+      <ion-card-header>
+  
+        <ion-card-subtitle>
+          {{ (currentActivity?.name) ? currentActivity?.name : "Getting Next Activity..." }}
+          <ion-spinner *ngIf="!currentActivity"></ion-spinner>
+        </ion-card-subtitle>
+        <ion-card-title> {{  currentActivity?.time }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+  
+  
+        <ion-label>
+          <p>Next Activity: <b>{{ nextActivity?.name }} </b></p>
+          <p> Start Time: <b>{{ nextActivity?.startTime }}</b></p>
+  
+        </ion-label>
+  
+      </ion-card-content>
+  
+    </ion-card>
+  
+    <ion-list>
+      <ion-item  (click)="viewNotes(activity)" *ngFor="let activity of activities">
+        <ion-label class="active-drill">
+          <h2> {{ activity.name }}</h2>
+          <p> {{ activity.duration }} Minutes - {{ activity.startTime }} </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
