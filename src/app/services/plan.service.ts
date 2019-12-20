@@ -1,47 +1,62 @@
 import { Injectable } from '@angular/core';
+import { UserService } from './user.service';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class Plan{
-  constructor(){}
+export class Plan {
+
+  constructor(
+    public id?: string,
+    public datetime?: string,
+    public activityCount?: number,
+    public isoDatetime?: string,
+    public timestamp?: number,
+    public endTimestamp?: number,
+    public endTime?: string,
+    public isoEndTime?: string,
+    public date?: string,
+  ) { }
 }
 export class PlanService {
 
-  constructor() { }
+  constructor(
+    private userService: UserService,
+    private firebaseService: FirebaseService,
+  ) { }
 
-  addPlan(plan: Plan): Promise<boolean> {
-    // save plan to firebase
+  addPlan(plan: Plan) {
+    let user = this.userService.user;
+    return new Promise((resolve) => {
+      this.firebaseService.addDocument("users/" + user.uid + "/plans", plan).then(() => {
+        return resolve();
+      })
+    })
 
-    // return that plan was saved
-
-
-    //return error if the plan was not saved
-
-    return
   }
 
-  editPlan(plan: Plan): Promise<boolean>{
-    // save plan to firebase
-
-    // return that plan was saved
-
-
-    //return error if the plan was not saved
-    return
+  deletePlan(plan: Plan) {
+    let user = this.userService.user;
+    return new Promise((resolve) => {
+      this.firebaseService.deleteDocument("/users/" + user.uid + "/plans/" + plan.id).then(() => {
+        return resolve();
+      })
+    })
   }
 
-  deletePlan(plan: Plan): Promise<boolean> {
-    // delete plan from firebase
-
-    // return that plan was deleted
-
-    // return error if plan could not be deleted
-    return
+  editPlan(plan: Plan) {
+    let user = this.userService.user;
+    return new Promise((resolve) => {
+      this.firebaseService.setDocument("/users/" + user.uid + "/plans/" + plan.id, plan).then(() => {
+        return resolve();
+      })
+    })
   }
 
-  getNextPlan(): Promise<Plan>{
+  getNextPlan(): Promise<Plan> {
+    let user = this.userService.user
     // get the next plan
 
     return;

@@ -5,7 +5,7 @@ import { PlanPage } from './plan.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: PlanPage
   }
 ];
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PlanPageRoutingModule {}
+export class PlanPageRoutingModule { }

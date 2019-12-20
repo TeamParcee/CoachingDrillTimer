@@ -1,13 +1,32 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/practice-plans"></ion-back-button>
+      <ion-back-button defaultHref="tabs/practice-plans"></ion-back-button>
     </ion-buttons>
-    <ion-title>add-plan</ion-title>
+    <ion-title>Add Plan</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Practice Date & Time </ion-label>
+      <ion-datetime pickerFormat="MMM DD YY h:m A" displayFormat="MMM DD, YYYY h:m A" [(ngModel)]="plan.isoDatetime">
+      </ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="errorDate" lines="none">
+      <ion-label>
+        <ion-text color="danger">
+          <p>Please enter the date & time of your Practice</p>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Template (Optional)</ion-label>
+      <ion-select>
+        <ion-select-option>No Template</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
   <ion-button (click)="save()">Save</ion-button>
 </ion-content>

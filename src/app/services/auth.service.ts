@@ -72,15 +72,14 @@ export class AuthService {
 
   confirmEmail(): Promise<boolean> {
     // check and return if the users email has been confirmed
-
+    firebase.auth().currentUser.reload();
     return new Promise((resolve) => {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user.emailVerified) {
-          return resolve(true)
-        } else {
-          return resolve(false)
-        }
-      })
+      let user = firebase.auth().currentUser;
+      if (user.emailVerified) {
+        return resolve(true)
+      } else {
+        return resolve(false)
+      }
     })
   }
 
@@ -89,14 +88,15 @@ export class AuthService {
 
     return new Promise((resolve) => {
       firebase.auth().onAuthStateChanged((user) => {
-        user.sendEmailVerification().then(() => {
-          // return if the email was sent
-          return resolve();
-        }).catch((e) => {
-          // send error if acount creation was not successfull
-          this.helper.okAlert("There was a problem", e.message)
-        })
-
+        if (user) {
+          user.sendEmailVerification().then(() => {
+            // return if the email was sent
+            return resolve();
+          }).catch((e) => {
+            // send error if acount creation was not successfull
+            this.helper.okAlert("There was a problem", e.message)
+          })
+        }
       })
     })
   }
@@ -131,14 +131,28 @@ export class AuthService {
   }
 
   deleteAccount(user: User): void {
-    // delete local user data
+
 
     // delete userdata from firestore
+    this.firebaseService.deleteDocument("/users/" + user.uid).then(() => {
 
-    // delete firebase account
+      // delete local user data
+      this.userService.user = null;
+
+      // delete firebase account
+      firebase.auth().currentUser.delete().then(() => {
+
+        // navagate to login screen
+        this.navCtrl.navigateBack("/login")
+      })
+    })
 
 
-    // navagate to login screen
+
+
+
+
+
   }
 
 }

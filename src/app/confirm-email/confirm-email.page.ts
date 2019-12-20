@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { User, UserService } from '../services/user.service';
 import { HelperService } from '../services/helper.service';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-confirm-email',
@@ -16,12 +17,12 @@ export class ConfirmEmailPage implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private helper: HelperService,
+    private firebaseService: FirebaseService
   ) { }
 
   ngOnInit() {
   }
 
-  user: User = this.userService.user;
   confirmationInvertal;
 
   ionViewWillEnter() {
@@ -33,21 +34,21 @@ export class ConfirmEmailPage implements OnInit {
 
   sendConfirmationEmail() {
     this.authService.sendConfirmationEmail().then(() => {
-      this.helper.okAlert("Confirmation Email", "A confirmation email has been sent to " + this.user.email);
+      this.helper.okAlert("Confirmation Email", "A confirmation email has been sent to " + this.userService.user.email);
       this.confirmationInvertal = setInterval(async () => {
-        console.log("checking email confirmed");
+        console.log("checking email confirmed", this.userService.user);
         let emailConfirmed = await this.authService.confirmEmail();
         if (emailConfirmed) {
-
-          // this.navCtrl.navigateForward("tabs/drill-timer")
-          console.log("email verified", emailConfirmed)
+          this.userService.user.emailVerified = true;
+          this.firebaseService.updateDocument("/users/" + this.userService.user.uid, { emailVerified: true });
+          this.navCtrl.navigateForward("tabs/drill-timer")
         }
-      }, 1000)
+      }, 2000)
     })
   }
 
   logout() {
-    this.authService.signout(this.user)
+    this.authService.signout(this.userService.user)
   }
 
   login() {

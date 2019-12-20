@@ -14,6 +14,8 @@ export class ActivityService {
 
   constructor() { }
 
+  currentActivities: Activity[];
+  
   addActivity(activity: Activity, plan: Plan): Promise<boolean> {
     // save activity to the plan on firebase
 

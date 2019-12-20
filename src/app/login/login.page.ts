@@ -23,7 +23,6 @@ export class LoginPage implements OnInit {
 
   login() {
     this.authService.loginWithEmail(this.user).then(() => {
-      this.userService.user = this.user;
       this.navCtrl.navigateForward("/tabs/drill-timer")
     })
   }

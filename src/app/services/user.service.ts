@@ -24,7 +24,8 @@ export class UserService {
   ) {
     firebase.auth().onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
-        this.user = await this.firebaseService.getDocument("/users/" + firebaseUser.uid)
+        this.user = await this.firebaseService.getDocument("/users/" + firebaseUser.uid);
+        console.log("user service loaded", this.user)
       }
     })
   }

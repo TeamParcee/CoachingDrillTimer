@@ -10,6 +10,7 @@ export class LoginGuard implements CanActivate {
 
   async canActivate() {
     let loggedIn = await this.isLoggedIn();
+    console.log(loggedIn);
     if (loggedIn) {
       return true
     } else {

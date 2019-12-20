@@ -4,7 +4,7 @@ import { LoginGuard } from './login/login.guard';
 import { ConfirmEmailGuard } from './confirm-email/confirm-email.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'intro', pathMatch: 'full' },
+  { path: '', redirectTo: 'tabs', pathMatch: 'full' },
   { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomePageModule) },
   {
     path: 'intro',
@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'confirm-email',
-    loadChildren: () => import('./confirm-email/confirm-email.module').then(m => m.ConfirmEmailPageModule)
+    loadChildren: () => import('./confirm-email/confirm-email.module').then(m => m.ConfirmEmailPageModule), canActivate: [LoginGuard]
   },
 ];
 

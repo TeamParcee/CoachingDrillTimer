@@ -10,18 +10,24 @@
     <ion-list>
       <ion-item>
         <ion-label position="stacked">Email</ion-label>
-        <ion-input name="email" type="email" #email ="ngModel" [(ngModel)]="user.email" required></ion-input>
+        <ion-input name="email" type="email" #email="ngModel" [(ngModel)]="user.email" required></ion-input>
       </ion-item>
       <ion-text color="danger">
         <p *ngIf="!email.valid && email.touched" class="ion-padding-start">
-          email is required
+          Email is required
         </p>
       </ion-text>
 
       <ion-item>
         <ion-label position="stacked">Password</ion-label>
-        <ion-input name="password" type="password" #password [(ngModel)]="user.password" required></ion-input>
+        <ion-input name="password" type="password" #password="ngModel" [(ngModel)]="user.password" required></ion-input>
       </ion-item>
+
+      <ion-text color="danger">
+        <p *ngIf="!password.valid && password.touched" class="ion-padding-start">
+          Password is required
+        </p>
+      </ion-text>
     </ion-list>
   </form>
 

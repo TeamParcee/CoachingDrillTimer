@@ -14,6 +14,10 @@ const routes: Routes = [
       }, {
         path: 'practice-plans',
         loadChildren: () => import('../practice-plans/practice-plans.module').then(m => m.PracticePlansPageModule)
+      },
+      {
+        path: '',
+        redirectTo: 'drill-timer'
       }
     ]
   }

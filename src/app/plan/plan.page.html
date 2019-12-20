@@ -1,20 +1,38 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/practice-plans"></ion-back-button>
+      <ion-back-button defaultHref="tabs/plans"></ion-back-button>
     </ion-buttons>
-    <ion-title>plan</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="savePlan()">Change Time</ion-button>
-      <ion-button (click)="deletePlan()">Delete Plan</ion-button>
-    </ion-buttons>
-
+    <ion-title>Plan</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list-header *ngIf="plan">
+    <ion-datetime style="color: #3880ff" (ionChange)="updateTime()" pickerFormat="MMM DD, hh:mm A"
+      displayFormat="DDD, MMM DD, h:mm A" [(ngModel)]="plan.isoDatetime" fill="clear">
+    </ion-datetime>
+  </ion-list-header>
 
+  <ion-text>
+    <h5>End Time: {{ this.endTime }}</h5>
+  </ion-text>
   <ion-button (click)="addActivity()">Add Activity</ion-button>
-  <ion-button (click)="deleteActivity()">Delete Activity</ion-button>
-  <ion-button (click)="editActivity()">Edit Activity</ion-button>
+
+  <ion-reorder-group *ngIf="plan" (ionItemReorder)="reorderItems($event)" disabled="false">
+    <ion-item *ngFor="let activity of activities">
+      <ion-label class="ion-text-wrap" (click)="viewNotes(activity)">
+        {{ activity.name }}
+        <p> {{ activity.duration }} minutes - {{ (activity.startTime) ? activity.startTime  : "No Start Time"}}</p>
+      </ion-label>
+      <ion-label>
+        <p (click)="editActivity(activity)">Edit</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button color="dark">
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-reorder-group>
 </ion-content>
