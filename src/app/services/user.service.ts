@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import * as firebase from 'firebase';
+import { FirebaseService } from './firebase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +13,21 @@ export class User {
     public uid?: string,
     public photoURL?: string,
     public email?: string,
-    public password?:string,
-    public emailVerified?:boolean,
-  ){}
+    public password?: string,
+    public emailVerified?: boolean,
+  ) { }
 }
 export class UserService {
 
-  constructor() { }
+  constructor(
+    private firebaseService: FirebaseService,
+  ) {
+    firebase.auth().onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        this.user = await this.firebaseService.getDocument("/users/" + firebaseUser.uid)
+      }
+    })
+  }
 
 
   user: User;

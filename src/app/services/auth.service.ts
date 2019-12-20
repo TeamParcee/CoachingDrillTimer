@@ -30,10 +30,10 @@ export class AuthService {
 
     return new Promise((resolve) => {
       // logs the user in
-      firebase.auth().signInWithEmailAndPassword(user.email, user.password).then((result) => {
+      firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(async (result) => {
         //return that the login was successfull and update User Params
-        user.uid = result.user.uid;
-        user.emailVerified = result.user.emailVerified;
+        this.userService.user = await this.firebaseService.getDocument("/users/" + result.user.uid);
+        console.log(this.userService.user, "this is the user");
         return resolve()
       }).catch((e) => {
         this.helper.okAlert("There was a problem", e.message)
@@ -48,9 +48,9 @@ export class AuthService {
       firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then((result) => {
         user.uid = result.user.uid;
         user.emailVerified = result.user.emailVerified;
-
+        user.password = "******";
         // create user data on firestore
-        this.firebaseService.setDocument("users/" + user.uid, {...user})
+        this.firebaseService.setDocument("users/" + user.uid, { ...user })
 
         // save user to local variable
         this.userService.user = user;
@@ -58,7 +58,6 @@ export class AuthService {
         // return that the account creation was successfull
         return resolve()
       }).catch((e) => {
-
         // send error if acount creation was not successfull
         this.helper.okAlert("There was a problem", e.message)
       })
@@ -71,19 +70,35 @@ export class AuthService {
   }
 
 
-  confirmEmail(user: User): Promise<boolean> {
+  confirmEmail(): Promise<boolean> {
     // check and return if the users email has been confirmed
-    return
+
+    return new Promise((resolve) => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user.emailVerified) {
+          return resolve(true)
+        } else {
+          return resolve(false)
+        }
+      })
+    })
   }
 
-  sendConfirmationEmail(user: User): Promise<boolean> {
+  sendConfirmationEmail(): Promise<boolean> {
     // send a confirmation email to the user
 
-    // return if the email was sent
+    return new Promise((resolve) => {
+      firebase.auth().onAuthStateChanged((user) => {
+        user.sendEmailVerification().then(() => {
+          // return if the email was sent
+          return resolve();
+        }).catch((e) => {
+          // send error if acount creation was not successfull
+          this.helper.okAlert("There was a problem", e.message)
+        })
 
-    // send and error if the email could not be sent
-
-    return
+      })
+    })
   }
 
   sendPasswordResetEmail(user: User): Promise<boolean> {
