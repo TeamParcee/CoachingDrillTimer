@@ -4,7 +4,7 @@ import { PlanService, Plan } from '../services/plan.service';
 import { UserService } from '../services/user.service';
 import { HelperService } from '../services/helper.service';
 import * as firebase from 'firebase';
-
+import * as moment from   'moment';
 @Component({
   selector: 'app-practice-plans',
   templateUrl: './practice-plans.page.html',
@@ -34,6 +34,7 @@ export class PracticePlansPage implements OnInit {
   getPlans() {
     let user = this.userService.user;
     firebase.firestore().collection("users/" + user.uid + "/plans/")
+    .orderBy("timestamp")
       .onSnapshot((plansSnap) => {
         let plans = [];
         plansSnap.forEach((plan) => {
@@ -51,6 +52,24 @@ export class PracticePlansPage implements OnInit {
           })
         }
       })
+  }
+
+
+
+  myHeaderFn(record, recordIndex, records: []) {
+
+    let month = moment(record.date).format('MMMM');
+    if (recordIndex == 0) {
+      return month;
+    }
+
+    let lastRecord: any = records[(recordIndex - 1)];
+    let lastMonth = moment(lastRecord.date).format('MMMM');
+    if (month != lastMonth) {
+      return month
+    } else {
+      return null
+    }
   }
 
 

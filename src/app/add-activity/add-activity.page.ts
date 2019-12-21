@@ -5,6 +5,7 @@ import { Plan } from '../services/plan.service';
 import { FirebaseService } from '../services/firebase.service';
 import { UserService, User } from '../services/user.service';
 import { HelperService } from '../services/helper.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-activity',
@@ -40,12 +41,21 @@ export class AddActivityPage implements OnInit {
     if (!this.validateForm) {
       return
     }
+    this.helper.showLoading();
+    this.activity.endTime = this.getTimeOfEvent(this.activity.startTime, this.activity.duration);
     this.firebaseService.addDocument("users/" + this.user.uid + "/plans/" + this.plan.id + "/activities", this.activity).then(() => {
       this.firebaseService.updateDocument("users/" + this.user.uid + "/plans/" + this.plan.id, { activityCount: (this.plan.activityCount + 1) }).then(() => {
+        this.helper.hideLoading();
         this.close();
       })
     })
 
+  }
+
+
+  getTimeOfEvent(time, minutes) {
+    let x = moment(time, "hh:mm a").add('minutes', minutes).format('LT');
+    return x;
   }
 
   validateForm() {

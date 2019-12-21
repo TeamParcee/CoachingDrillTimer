@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item>
       <ion-label position="stacked">Practice Date & Time </ion-label>
-      <ion-datetime pickerFormat="MMM DD YY h:m A" displayFormat="MMM DD, YYYY h:m A" [(ngModel)]="plan.isoDatetime">
+      <ion-datetime [min]="2019" [max]="maxDate" pickerFormat="MMM DD YY h:m A" displayFormat="MMM DD, YYYY h:m A" [(ngModel)]="plan.isoDatetime">
       </ion-datetime>
     </ion-item>
     <ion-item *ngIf="errorDate" lines="none">

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Plan } from './plan.service';
-
+import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,12 +14,19 @@ export class Activity {
     public id?: string,
     public order?: number,
     public planId?: string,
-  ) { }
+    public endTime?: string,
+  ) { 
+  
+  }
+
+  
+
 }
 
 export class ActivityService {
 
-  constructor() { }
+  constructor(
+  ) { }
 
   currentActivity;
   nextActivity;
@@ -44,6 +51,8 @@ export class ActivityService {
   }
 
   deleteActivity(activity: Activity, plan: Plan): Promise<boolean> {
+
+
     // delet activity from the plan on firebase
 
     // return that activity was deleted

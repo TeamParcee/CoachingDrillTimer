@@ -5,6 +5,7 @@ import { Plan } from '../services/plan.service';
 import { HelperService } from '../services/helper.service';
 import { FirebaseService } from '../services/firebase.service';
 import { User, UserService } from '../services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-edit-activity',
@@ -38,11 +39,17 @@ export class EditActivityPage implements OnInit {
     if (!this.validateForm) {
       return
     }
-
+    this.activity.endTime = this.getTimeOfEvent(this.activity.startTime, this.activity.duration);
     this.firebaseService.setDocument("users/" + this.user.uid + "/plans/" + this.plan.id + "/activities/" + this.activity.id, this.activity).then(() => {
       this.close();
     })
 
+  }
+
+
+  getTimeOfEvent(time, minutes) {
+    let x = moment(time, "hh:mm a").add('minutes', minutes).format('LT');
+    return x;
   }
 
   validateForm() {
@@ -69,10 +76,14 @@ export class EditActivityPage implements OnInit {
     this.helper.confirmationAlert("Delete Activity", "Are you sure you want to delete this activity?", { denyText: "Cancel", confirmText: "Delete" })
       .then((result) => {
         if (result) {
+          this.helper.showLoading();
           this.firebaseService.deleteDocument("users/" + this.user.uid + "/plans/" + this.plan.id + "/activities/" + this.activity.id)
             .then(() => {
-              this.firebaseService.updateDocument("users/" + this.user.uid + "/plans/" + this.plan.id, { activityCount: (this.plan.activityCount - 1) })
-              this.close();
+              this.firebaseService.updateDocument("users/" + this.user.uid + "/plans/" + this.plan.id, { activityCount: (this.plan.activityCount - 1) }).then(() => {
+                this.helper.hideLoading();
+                this.close();
+              })
+
             })
         }
       })

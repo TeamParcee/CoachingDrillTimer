@@ -4,6 +4,7 @@ import { NavController } from '@ionic/angular';
 import { User, UserService } from '../services/user.service';
 import * as moment from 'moment';
 import { TimerService } from '../services/timer.service';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-add-plan',
@@ -17,6 +18,7 @@ export class AddPlanPage implements OnInit {
     private navCtrl: NavController,
     private userService: UserService,
     private timerService: TimerService,
+    private helper: HelperService,
   ) { }
 
   ngOnInit() {
@@ -26,6 +28,9 @@ export class AddPlanPage implements OnInit {
   user: User = this.userService.user;
   errorTime;
   errorDate;
+  minDate: string = moment().format();
+  maxDate = moment().add("1", "year").format();
+
 
 
 
@@ -37,6 +42,7 @@ export class AddPlanPage implements OnInit {
   save() {
 
     if (this.isFormCorrect()) {
+      this.helper.showLoading();
       this.plan.endTime = moment(this.plan.isoDatetime).format('LT');
       this.plan.isoEndTime = this.plan.isoDatetime;
       this.plan.date = moment(this.plan.isoDatetime).format('ddd, MMM DD, YYYY');
@@ -44,6 +50,7 @@ export class AddPlanPage implements OnInit {
       this.plan.timestamp = this.timerService.getTimeStamp(this.plan.isoDatetime);
       this.plan.endTimestamp = this.plan.timestamp;
       this.planService.addPlan(this.plan).then(() => {
+        this.helper.hideLoading();
         this.navCtrl.back()
       })
     }
