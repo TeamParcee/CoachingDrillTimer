@@ -48,6 +48,10 @@ export class PlanPage implements OnInit {
     await this.getPlan();
   }
 
+  async ionViewWillLeave(){
+    this.updateEndTime();
+  }
+  
   async getPlan() {
     let user = this.userService.user;
     return new Promise((resolve) => {
@@ -74,6 +78,7 @@ export class PlanPage implements OnInit {
         let time = moment(this.plan.datetime).format("LT");
         let minutes = 0;
         let count = 0;
+        this.endTime = time;
         activitySnap.forEach((activity) => {
           count = count + 1;
           let a = activity.data();
@@ -84,11 +89,8 @@ export class PlanPage implements OnInit {
           minutes = a.duration;
           this.totalTime = this.totalTime + (minutes * 1);
           this.endTime = this.getTimeOfEvent(time, minutes);
-          activity.ref.update({ startTime: time, endTime: this.endTime});
+          activity.ref.update({ startTime: time, endTime: this.endTime });
         })
-        if (this.endTime) {
-          this.updateEndTime();
-        }
         this.activities = activities;
       })
 
@@ -130,9 +132,9 @@ export class PlanPage implements OnInit {
   updateOrder() {
     let user = this.userService.user;
     this.orderArray.forEach((activity) => {
-     
+
       let endTime = this.getTimeOfEvent(activity.startTime, activity.duration)
-      firebase.firestore().doc("/users/" + user.uid + "/plans/" + this.plan.id + "/activities/" + activity.id).update({ order: activity.order})
+      firebase.firestore().doc("/users/" + user.uid + "/plans/" + this.plan.id + "/activities/" + activity.id).update({ order: activity.order })
     })
   }
 
@@ -149,7 +151,7 @@ export class PlanPage implements OnInit {
       date: moment(this.plan.isoDatetime).format('ddd, MMM DD, YYYY'),
       isoDatetime: this.plan.isoDatetime,
       datetime: moment(this.plan.isoDatetime).format('llll'),
-      timestamp: this.timerService.getTimeStamp(this.plan.isoDatetime)
+      timestamp: this.timerService.getTimeStamp(this.plan.isoDatetime),
     }
 
     this.firebaseService.updateDocument("/users/" + user.uid + "/plans/" + this.plan.id, time);

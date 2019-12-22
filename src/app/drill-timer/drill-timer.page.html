@@ -13,14 +13,21 @@
 
 <ion-content>
 
-  <ion-text *ngIf="!activities || activities?.length == 0" class="ion-text-center">
+  <ion-text *ngIf="!plan" class="ion-text-center">
     <h5>You don't have any future Practices <br>
-      <ion-button href="/add-plan" fill="clear">Add One</ion-button>
+      <ion-button routerLink="/add-plan" fill="clear">Add One</ion-button>
     </h5>
   </ion-text>
 
 
-  <ion-card style="background: white;" *ngIf="activities && activities?.length > 0" (click)="viewCurrentActivity(currentActivity)">
+  <ion-text *ngIf="plan && !activities" class="ion-text-center">
+    <h5>You don't have an activities for your next Practice <br>
+      <ion-button (click)="addActivity()" fill="clear">Add One</ion-button>
+    </h5>
+  </ion-text>
+
+  <ion-card (click)="viewNotes(currentActivity)" style="background: white;"
+    *ngIf="activities && activities?.length > 0">
     <ion-card-header>
 
       <ion-card-subtitle>

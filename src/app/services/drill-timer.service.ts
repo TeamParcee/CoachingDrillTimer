@@ -31,31 +31,37 @@ export class DrillTimerService {
       let user = this.userService.user;
       let currentTime = this.getTimeStamp(new Date());
 
-      firebase.firestore().collection("/users/" + user.uid + "/plans/")
-        .where("endTimestamp", ">=", currentTime)
-        .orderBy('endTimestamp')
-        .limit(1).onSnapshot((planSnapshot) => {
-          if (planSnapshot.size == 1) {
-            this.currentPlan = planSnapshot.docs[0].data() as Plan;
-            planSnapshot.docs[0].ref.collection("activities")
-              .orderBy("order")
-              .onSnapshot(async (activitiesSnap) => {
-                let activities = [];
-                activitiesSnap.forEach((activity) => {
-                  let a = { ...activity.data() }
-                  a.date = moment(this.currentPlan.date, "ddd, MMM DD, YYYY").format("MMM DD, YYYY ") + a.startTime;
-                  a.endDate = moment(this.currentPlan.date, "ddd, MMM DD, YYYY").format("MMM DD, YYYY ") + a.startTime;
-                  activities.push(a)
-                })
-                this.activities = activities;
-                return resolve()
-              })
-          } else {
-            return resolve()
-          }
-        })
-    })
+      if (user) {
+        firebase.firestore().collection("/users/" + user.uid + "/plans/")
+          .where("endTimestamp", ">=", currentTime)
+          .orderBy('endTimestamp')
+          .limit(1).onSnapshot((planSnapshot) => {
+            if (planSnapshot.size == 1) {
+              this.currentPlan = planSnapshot.docs[0].data() as Plan;
+              planSnapshot.docs[0].ref.collection("activities")
+                .orderBy("order")
+                .onSnapshot(async (activitiesSnap) => {
+                  let activities = [];
+                  console.log(activitiesSnap.size)
+                  if (activitiesSnap.size > 0) {
+                    activitiesSnap.forEach((activity) => {
+                      let a = { ...activity.data() }
+                      a.date = moment(this.currentPlan.date, "ddd, MMM DD, YYYY").format("MMM DD, YYYY ") + a.startTime;
+                      a.endDate = moment(this.currentPlan.date, "ddd, MMM DD, YYYY").format("MMM DD, YYYY ") + a.endTime;
+                      activities.push(a)
+                    })
+                    this.activities = activities;
+                    console.log(this.activities, activities)
+                  }
 
+                  return resolve()
+                })
+            } else {
+              return resolve()
+            }
+          })
+      }
+    })
   }
 
 
@@ -92,25 +98,30 @@ export class DrillTimerService {
 
 
   getTime(activity) {
-    let activityTime = new Date(activity.date).getTime();
+    let activityStartTime = new Date(activity.date).getTime();
+    let activityEndTime = new Date(activity.endDate).getTime();
     let currentTime = new Date().getTime();
-    let timerTimeRaw = activityTime - currentTime;
+    let timerStartTimeRaw = activityStartTime - currentTime;
+    let timerEndTimeRaw = activityEndTime - currentTime;
 
-
-    if (timerTimeRaw < 0) {
+    if (timerEndTimeRaw < 0) {
       this.count++;
       this.startTimer();
       return;
     }
 
 
-    let timerMinutes = Math.floor((timerTimeRaw % (1000 * 60 * 60)) / (1000 * 60));
-    let timerSeconds = Math.floor((timerTimeRaw % (1000 * 60)) / 1000);
+    let timerStartMinutes = Math.floor((timerStartTimeRaw % (1000 * 60 * 60)) / (1000 * 60));
+    let timerStartSeconds = Math.floor((timerStartTimeRaw % (1000 * 60)) / 1000);
+    let timerEndMinutes = Math.floor((timerEndTimeRaw % (1000 * 60 * 60)) / (1000 * 60));
+    let timerEndSeconds = Math.floor((timerEndTimeRaw % (1000 * 60)) / 1000);
 
-    this.timer = ((timerMinutes.toString().length == 1) ? "0" + timerMinutes : timerMinutes) + ":" + ((timerSeconds.toString().length == 1) ? "0" + timerSeconds : timerSeconds);
 
-    if (timerTimeRaw > 359154) {
-      this.timer = moment(activityTime).calendar();
+
+    this.timer = ((timerEndMinutes.toString().length == 1) ? "0" + timerEndMinutes : timerEndMinutes) + ":" + ((timerEndSeconds.toString().length == 1) ? "0" + timerEndSeconds : timerEndSeconds);
+
+    if (timerStartTimeRaw > 0) {
+      this.timer = moment(activityStartTime).calendar();
 
     }
     this.currentAcivity = this.activities[this.count];
