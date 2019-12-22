@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>24268293516-qobqq5culi5vv01t7e6uc50rab4488bp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.24268293516-qobqq5culi5vv01t7e6uc50rab4488bp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAx5pZBS4wg6YqYsvL4qlztW1UNolKO1gk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>24268293516</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.parcee.coachingdrilltimer</string>
+	<key>PROJECT_ID</key>
+	<string>coachingdrilltimer</string>
+	<key>STORAGE_BUCKET</key>
+	<string>coachingdrilltimer.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:24268293516:ios:968026cc1b5fe727e682a9</string>
+	<key>DATABASE_URL</key>
+	<string>https://coachingdrilltimer.firebaseio.com</string>
+</dict>
+</plist>

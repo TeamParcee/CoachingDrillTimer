@@ -26,6 +26,7 @@ import { ViewNotesPage } from './view-notes/view-notes.page';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill'
 import { EditActivityPage } from './edit-activity/edit-activity.page';
+import { FCM } from '@ionic-native/fcm/ngx';
 
 /* native controls
 ionic cordova plugin add cordova-plugin-media
@@ -83,6 +84,7 @@ firebase.analytics();
     UserService,
     SplashScreen,
     Vibration,
+    FCM,
     Media,
     BackgroundMode,
     LocalNotifications,
