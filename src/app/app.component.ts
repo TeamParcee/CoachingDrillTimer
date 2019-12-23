@@ -18,11 +18,12 @@ export class AppComponent {
     private fcm: FCM,
   ) {
     this.initializeApp();
-    this.initNotification();
   }
 
   initNotification() {
     this.fcm.getToken().then(token => {
+      alert(token);
+      console.log(token, ":token");
       localStorage.setItem("messageToken", token)
     });
 
@@ -46,6 +47,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.initNotification();
     });
   }
 }
